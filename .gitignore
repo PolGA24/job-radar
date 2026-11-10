@@ -1,0 +1,26 @@
+# Entorno virtual
+.venv/
+
+# Secretos
+.env
+credentials.json
+token.json
+
+# Datos personales
+profile.md
+
+# Datos y logs locales
+*.db
+*.sqlite3
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Sistema / editores
+.DS_Store
+.vscode/
+.idea/

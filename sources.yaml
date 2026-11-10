@@ -1,0 +1,290 @@
+# sources.yaml — Fuentes de ofertas para Job Radar
+#
+# Campos:
+#   method:   api | rss | email | ats | manual
+#   priority: 1 (empezar ya) · 2 (fase 3) · 3 (cuando todo funcione)
+#   status:   ok        → método conocido y documentado
+#             verify    → comprobar antes de programar (si tiene RSS/API, condiciones de uso)
+#             manual    → no se automatiza; se revisa a mano
+#   phase:    fase del roadmap en la que se añade
+#
+# Reglas de oro:
+#   - Solo APIs, RSS, alertas por email y endpoints públicos de ATS.
+#   - Nada de scraping de LinkedIn, InfoJobs (web), Indeed ni Glassdoor.
+#   - Máximo 1–2 consultas al día por fuente. Respetar condiciones de uso.
+#   - Las claves de API NUNCA van aquí: van en .env (y .env en .gitignore).
+
+search:
+  keywords:
+    - desarrollador web junior
+    - programador junior
+    - wordpress
+    - php
+    - javascript
+    - frontend junior
+    - flutter
+    - desarrollador aplicaciones
+    - técnico informático
+    - seo técnico
+  locations:
+    - Barcelona
+    - Barcelona provincia
+    - Catalunya
+    - remoto
+
+sources:
+
+  # ── 1. Agregadores ───────────────────────────────────────────────
+  - id: adzuna
+    name: Adzuna
+    method: api
+    url: https://api.adzuna.com/v1/api/jobs/es/search/{page}
+    auth: app_id + app_key (gratis en developer.adzuna.com)
+    priority: 1
+    status: ok
+    phase: 1
+
+  - id: jooble
+    name: Jooble
+    method: api
+    url: https://jooble.org/api/{api_key}
+    auth: api_key (solicitar en jooble.org/api/about)
+    priority: 1
+    status: ok
+    phase: 1
+
+  - id: careerjet
+    name: Careerjet
+    method: api
+    url: https://www.careerjet.com/partners/api/
+    auth: affiliate id
+    priority: 2
+    status: verify
+    phase: 3
+
+  - id: talent_jobrapido_trovit
+    name: Talent.com / Jobrapido / Trovit / Jobatus
+    method: email
+    notes: Crear alertas por email → las lee el lector de Gmail
+    priority: 2
+    status: ok
+    phase: 3
+
+  # ── 2. Portales generalistas ─────────────────────────────────────
+  - id: infojobs
+    name: InfoJobs
+    method: api
+    url: https://api.infojobs.net/api/9/offer
+    auth: client_id + client_secret (developer.infojobs.net)
+    priority: 1
+    status: ok
+    phase: 3
+
+  - id: linkedin
+    name: LinkedIn
+    method: email
+    notes: Alertas de empleo → Gmail. No hay API ni scraping permitido.
+    priority: 1
+    status: ok
+    phase: 3
+
+  - id: indeed
+    name: Indeed
+    method: email
+    notes: Alertas de empleo → Gmail.
+    priority: 1
+    status: ok
+    phase: 3
+
+  - id: glassdoor
+    name: Glassdoor
+    method: email
+    priority: 3
+    status: ok
+    phase: 3
+
+  - id: infoempleo_jobandtalent
+    name: Infoempleo / Jobandtalent / Trabajos.com
+    method: email
+    priority: 3
+    status: verify
+    phase: 3
+
+  - id: primerempleo
+    name: Primer Empleo
+    method: email
+    notes: Muy orientado a perfiles junior. Comprobar si ofrece RSS.
+    priority: 2
+    status: verify
+    phase: 3
+
+  # ── 3. Tecnología ────────────────────────────────────────────────
+  - id: tecnoempleo
+    name: Tecnoempleo
+    method: rss
+    notes: Comprobar si las búsquedas guardadas exponen RSS; si no, email.
+    priority: 1
+    status: verify
+    phase: 3
+
+  - id: wordpress_jobs
+    name: WordPress Jobs
+    method: rss
+    url: https://jobs.wordpress.net/feed/
+    priority: 2
+    status: verify
+    phase: 3
+
+  - id: getonboard
+    name: Get on Board
+    method: api
+    priority: 2
+    status: verify
+    phase: 3
+
+  - id: welcometothejungle
+    name: Welcome to the Jungle
+    method: email
+    priority: 2
+    status: ok
+    phase: 3
+
+  - id: landingjobs_wellfound
+    name: Landing.jobs / Wellfound
+    method: email
+    priority: 3
+    status: ok
+    phase: 3
+
+  - id: domestika
+    name: Domestika Empleo
+    method: email
+    priority: 3
+    status: verify
+    phase: 3
+
+  # ── 4. Remoto ────────────────────────────────────────────────────
+  - id: remotive
+    name: Remotive
+    method: api
+    url: https://remotive.com/api/remote-jobs
+    priority: 2
+    status: ok
+    phase: 3
+
+  - id: remoteok
+    name: RemoteOK
+    method: api
+    url: https://remoteok.com/api
+    notes: Exige citar la fuente y enlazar la oferta original.
+    priority: 3
+    status: ok
+    phase: 3
+
+  - id: weworkremotely
+    name: We Work Remotely
+    method: rss
+    url: https://weworkremotely.com/categories/remote-programming-jobs.rss
+    priority: 3
+    status: ok
+    phase: 3
+
+  - id: himalayas
+    name: Himalayas
+    method: api
+    url: https://himalayas.app/jobs/api
+    priority: 3
+    status: ok
+    phase: 3
+
+  # ── 5. Sector público ────────────────────────────────────────────
+  - id: cido
+    name: CIDO (Diputació de Barcelona)
+    method: rss
+    url: https://cido.diba.cat/rss/oposicions/places-interinatge
+    notes: Filtrar por "informàtic" y grupo C1 (CFGS). Hay más feeds RSS por tipo.
+    priority: 1
+    status: ok
+    phase: 1
+
+  - id: atri_gencat
+    name: ATRI — ofertas temporales Generalitat
+    method: rss
+    priority: 1
+    status: verify
+    phase: 3
+
+  - id: feina_activa
+    name: Feina Activa (SOC)
+    method: rss
+    notes: Comprobar RSS o alertas. Si solo hay HTML, máximo 1 consulta/día o manual.
+    priority: 1
+    status: verify
+    phase: 3
+
+  - id: barcelona_activa
+    name: Barcelona Activa — ofertas
+    method: rss
+    priority: 2
+    status: verify
+    phase: 3
+
+  - id: empleate
+    name: Empléate (SEPE)
+    method: manual
+    priority: 3
+    status: verify
+    phase: 3
+
+  - id: universidades
+    name: Bolsas PTGAS UB / UPC / UAB / UPF
+    method: manual
+    notes: Plazas interinas de tècnic especialista informàtic. Muchas salen también en CIDO.
+    priority: 2
+    status: manual
+    phase: 3
+
+  # ── 6. Primer empleo ─────────────────────────────────────────────
+  - id: lasalle_borsa
+    name: Bolsa de trabajo La Salle Gràcia
+    method: manual
+    notes: Escribir al centro y pedir alta en la bolsa de antiguos alumnos.
+    priority: 1
+    status: manual
+    phase: 0
+
+  - id: consultoras
+    name: Programas junior de consultoras (NTT Data, Accenture, Capgemini, Sopra Steria, Inetum, Minsait, Viewnext)
+    method: email
+    notes: Alertas en sus portales de empleo (muchas usan Workday, no hacer scraping).
+    priority: 2
+    status: ok
+    phase: 3
+
+  # ── 7. Empresas directas (ATS públicos) ──────────────────────────
+  # La lista de empresas va en companies.yaml (fase 4).
+  ats_endpoints:
+    greenhouse:      https://boards-api.greenhouse.io/v1/boards/{slug}/jobs
+    lever:           https://api.lever.co/v0/postings/{slug}?mode=json
+    workable:        https://apply.workable.com/api/v1/widget/accounts/{slug}
+    recruitee:       https://{slug}.recruitee.com/api/offers/
+    personio:        https://{slug}.jobs.personio.de/xml
+    smartrecruiters: https://api.smartrecruiters.com/v1/companies/{slug}/postings
+    teamtailor:      https://{slug}.teamtailor.com/jobs.rss   # verify
+    factorial:       null                                      # verify: ¿endpoint público?
+
+  # ── 8. ETT / selección ───────────────────────────────────────────
+  - id: ett
+    name: Randstad / Adecco / Hays / Experis / Michael Page
+    method: email
+    priority: 3
+    status: ok
+    phase: 3
+
+  # ── 9. Comunidades (no automatizable) ────────────────────────────
+  - id: comunidades
+    name: Meetups WordPress/PHP/JS Barcelona, Discord/Slack/Telegram dev España
+    method: manual
+    priority: 2
+    status: manual
+    phase: 0
